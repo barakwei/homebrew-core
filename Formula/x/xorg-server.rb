@@ -1,8 +1,8 @@
 class XorgServer < Formula
   desc "X Window System display server"
   homepage "https://www.x.org"
-  url "https://www.x.org/releases/individual/xserver/xorg-server-21.1.13.tar.xz"
-  sha256 "b45a02d5943f72236a360d3cc97e75134aa4f63039ff88c04686b508a3dc740c"
+  url "https://www.x.org/releases/individual/xserver/xorg-server-21.1.14.tar.xz"
+  sha256 "8f2102cebdc4747d1656c1099ef610f5063c7422c24a177e300de569b354ee35"
   license all_of: ["MIT", "APSL-2.0"]
 
   bottle do
