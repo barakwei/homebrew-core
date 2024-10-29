@@ -1,8 +1,8 @@
 class SignalCli < Formula
   desc "CLI and dbus interface for WhisperSystems/libsignal-service-java"
   homepage "https://github.com/AsamK/signal-cli"
-  url "https://github.com/AsamK/signal-cli/archive/refs/tags/v0.13.5.tar.gz"
-  sha256 "c1fdc8ccff324278a9357aed04fa7de88ecba1fc270f5555b5cea77d415d1342"
+  url "https://github.com/AsamK/signal-cli/archive/refs/tags/v0.13.9.tar.gz"
+  sha256 "a8033b84bdcf1246a3249b0d46b33331c4e52f73f09452870673f9a871d56444"
   license "GPL-3.0-or-later"
 
   bottle do
@@ -31,8 +31,8 @@ class SignalCli < Formula
   # url=https://github.com/AsamK/signal-cli/releases/download/v$version/signal-cli-$version.tar.gz
   # curl -fsSL $url | tar -tz | grep libsignal-client
   resource "libsignal-client" do
-    url "https://github.com/signalapp/libsignal/archive/refs/tags/v0.52.2.tar.gz"
-    sha256 "40ddc51bc5bf1013c583c07717ed00cedfafda55f9f9a43aad72f9a55986b199"
+    url "https://github.com/signalapp/libsignal/archive/refs/tags/v0.58.2.tar.gz"
+    sha256 "694b8822364d2e5ea2cfe03e6be967db3de0922c8952d05e9407c92ed2d5056a"
   end
 
   def install
@@ -52,14 +52,15 @@ class SignalCli < Formula
       odie "#{res.name} needs to be updated to #{embedded_jar_version}!" if embedded_jar_version != res.version
 
       # rm originally-embedded libsignal_jni lib
-      system "zip", "-d", libsignal_client_jar, "libsignal_jni.so", "libsignal_jni.dylib", "signal_jni.dll"
+      system "zip", "-d", libsignal_client_jar, "libsignal_jni_*.so", "libsignal_jni_*.dylib", "signal_jni_*.dll"
 
       # build & embed library for current platform
       cd "java" do
         inreplace "settings.gradle", "include ':android'", ""
         system "./build_jni.sh", "desktop"
-        cd "shared/resources" do
-          system "zip", "-u", libsignal_client_jar, shared_library("libsignal_jni")
+        cd "client/src/main/resources" do
+          arch = Hardware::CPU.intel? ? "amd64" : "aarch64"
+          system "zip", "-u", libsignal_client_jar, shared_library("libsignal_jni_#{arch}")
         end
       end
     end
